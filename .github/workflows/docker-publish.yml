@@ -24,6 +24,19 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Set Versions
+        uses: actions/github-script@v4
+        id: set_version
+        with:
+          script: |
+            const tag = context.ref.substring(10)
+            const no_v = tag.replace('v', '')
+            const dash_index = no_v.lastIndexOf('-')
+            const no_dash = (dash_index > -1) ?  no_v.substring(0, dash_index) : no_v
+            core.setOutput('tag', tag)
+            core.setOutput('no-v', no_v)
+            core.setOutput('no-dash', no_dash)
+
       # Install the cosign tool except on PR
       # https://github.com/sigstore/cosign-installer
       - name: Install cosign
@@ -71,12 +84,12 @@ jobs:
         with:
           context: .
           build-args: |
-            "cachet_ver=${{ github.ref_name }}"
+            "cachet_ver=${{steps.set_version.outputs.no-dash}}"
           platforms: linux/amd64,linux/arm64
           push: ${{ github.event_name != 'pull_request' }}
           tags: |
             ${{ github.repository }}:latest
-            ${{ github.repository }}:${{ github.ref_name }}
+            ${{ github.repository }}:${{steps.set_version.outputs.no-dash}}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
@@ -89,12 +102,12 @@ jobs:
         with:
           context: .
           build-args: |
-            "cachet_ver=${{ github.ref_name }}"
+            "cachet_ver=${{steps.set_version.outputs.no-dash}}"
           platforms: linux/amd64,linux/arm64
           push: ${{ github.event_name != 'pull_request' }}
           tags: |
             cachethq/docker:latest
-            cachethq/docker:${{ github.ref_name }}
+            cachethq/docker:${{steps.set_version.outputs.no-dash}}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
