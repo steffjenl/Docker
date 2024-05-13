@@ -92,8 +92,8 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: ${{ github.event_name != 'pull_request' }}
           tags: |
-            monkeysoft/docker:latest
-            monkeysoft/docker:${{steps.set_version.outputs.no-dash}}
+            cachethq/docker:latest
+            cachethq/docker:${{steps.set_version.outputs.no-dash}}
             ghcr.io/${{ steps.lower-repo.outputs.repository }}:latest
             ghcr.io/${{ steps.lower-repo.outputs.repository }}:${{steps.set_version.outputs.no-dash}}
           labels: ${{ steps.meta.outputs.labels }}
