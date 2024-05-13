@@ -87,25 +87,10 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: ${{ github.event_name != 'pull_request' }}
           tags: |
-            ${{ github.repository }}:latest
-            ${{ github.repository }}:${{steps.set_version.outputs.no-dash}}
-          labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-
-        # Build en push Docker Image to Docker Hub
-      - name: Build and push Docker image
-        id: build-and-push
-        uses: docker/build-push-action@v5 # v5.0.0
-        with:
-          context: .
-          build-args: |
-            "cachet_ver=${{steps.set_version.outputs.no-dash}}"
-          platforms: linux/amd64,linux/arm64
-          push: ${{ github.event_name != 'pull_request' }}
-          tags: |
             cachethq/docker:latest
             cachethq/docker:${{steps.set_version.outputs.no-dash}}
+            ${{ github.repository }}:latest
+            ${{ github.repository }}:${{steps.set_version.outputs.no-dash}}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
