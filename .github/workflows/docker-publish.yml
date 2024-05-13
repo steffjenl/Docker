@@ -88,7 +88,7 @@ jobs:
         with:
           context: .
           build-args: |
-            "cachet_ver=${{steps.set_version.outputs.no-dash}}"
+            "cachet_ver=${{ github.ref_name }}"
           platforms: linux/amd64,linux/arm64
           push: ${{ github.event_name != 'pull_request' }}
           tags: |
