@@ -37,6 +37,11 @@ jobs:
             core.setOutput('no-v', no_v)
             core.setOutput('no-dash', no_dash)
 
+      - id: lower-repo
+        name: Repository to lowercase
+        run: |
+          echo "repository=${GITHUB_REPOSITORY@L}" >> $GITHUB_OUTPUT
+
       # Install the cosign tool except on PR
       # https://github.com/sigstore/cosign-installer
       - name: Install cosign
@@ -89,8 +94,8 @@ jobs:
           tags: |
             monkeysoft/docker:latest
             monkeysoft/docker:${{steps.set_version.outputs.no-dash}}
-            ${{ github.repository }}:latest
-            ${{ github.repository }}:${{steps.set_version.outputs.no-dash}}
+            ghcr.io/${{ steps.lower-repo.outputs.repository }}:latest
+            ghcr.io/${{ steps.lower-repo.outputs.repository }}:${{steps.set_version.outputs.no-dash}}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
