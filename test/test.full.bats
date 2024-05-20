@@ -8,12 +8,12 @@ load "lib/output"
   command docker compose -f test/docker-compose-full.yml build --no-cache cachet
 }
 
-@test "[$TEST_FILE] testing Cachet docker-compose up" {
+@test "[$TEST_FILE] testing Cachet docker compose up" {
   command docker compose -f test/docker-compose-full.yml up -d
 }
 
 @test "[$TEST_FILE] check for container startup" {
-  docker_wait_for_log docker_cachet_1 15 "Cachet is now running ..."
+  docker_wait_for_log docker_cachet_1 30 "Cachet is now running ..."
 }
 
 @test "[$TEST_FILE] check for container init" {

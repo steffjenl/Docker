@@ -1,4 +1,4 @@
-name: cachet
+version: "3"
 
 services:
   postgres:
