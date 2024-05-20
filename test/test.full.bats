@@ -5,11 +5,15 @@ load "lib/batslib"
 load "lib/output"
 
 @test "[$TEST_FILE] testing Cachet Docker image build" {
-  command docker-compose -f test/docker-compose-full.yml build --no-cache cachet
+  command docker compose -f test/docker-compose-full.yml build --no-cache cachet
 }
 
 @test "[$TEST_FILE] testing Cachet docker-compose up" {
-  command docker-compose -f test/docker-compose-full.yml up -d
+  command docker compose -f test/docker-compose-full.yml up -d
+}
+
+@test "[$TEST_FILE] check for container startup" {
+  docker_wait_for_log docker_cachet_1 15 "Cachet is now running ..."
 }
 
 @test "[$TEST_FILE] check for container init" {
@@ -96,10 +100,10 @@ load "lib/output"
 }
 
 @test "[$TEST_FILE] stop all test containers" {
-	stop_bats_containers
+	stop_bats_containers test/docker-compose-full.yml
 }
 
 @test "[$TEST_FILE] Cleanup test containers" {
-	docker_clean docker_cachet_1
-  	docker_clean docker_postgres_1
+	docker_cleanup test/docker-compose-full.yml
+  	docker_cleanup test/docker-compose-full.yml
 }

@@ -1,8 +1,8 @@
-version: "3"
+name: cachet
 
 services:
   cachet:
-    image: ${DOCKER_REPO:-ghcr.io/cachethq/docker}:${APP_VERSION:-latest}
+    image: cachethq/docker
     build:
       context: ..
       dockerfile: Dockerfile

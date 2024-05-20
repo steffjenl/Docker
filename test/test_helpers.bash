@@ -13,12 +13,15 @@ TEST_FILE=$(basename $BATS_TEST_FILENAME .bats)
 #
 # $1 optional label value
 function stop_bats_containers {
-	docker-compose stop
+  echo "Stopping all containers with the bats-type label $1"
+	docker compose -f $1 stop
 }
 
 # delete all containers
 docker_cleanup() {
-	docker-compose rm -af
+  echo "Cleaning up all containers $1"
+  docker compose -f $1 down
+	docker compose -f $1 rm -f
 }
 
 # Send a HTTP request to container $1 for path $2 and

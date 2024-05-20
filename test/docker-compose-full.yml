@@ -1,4 +1,4 @@
-version: "3"
+name: cachet
 
 services:
   postgres:
@@ -10,12 +10,13 @@ services:
       - POSTGRES_PASSWORD=postgres
     restart: always
   cachet:
-    image: ${DOCKER_REPO:-ghcr.io/cachethq/docker}:${APP_VERSION:-latest}
+    image: cachethq/docker
+    container_name: docker_cachet_1
     build:
       context: ..
       dockerfile: Dockerfile
     ports:
-      - 8000:8000
+      - 80:8000
     links:
       - postgres:postgres
     environment:
