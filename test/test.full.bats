@@ -5,11 +5,11 @@ load "lib/batslib"
 load "lib/output"
 
 @test "[$TEST_FILE] testing Cachet Docker image build" {
-  command docker compose -f test/docker-compose-full.yml build --no-cache cachet
+  command docker-compose -f test/docker-compose-full.yml build --no-cache cachet
 }
 
 @test "[$TEST_FILE] testing Cachet docker compose up" {
-  command docker compose -f test/docker-compose-full.yml up -d
+  command docker-compose -f test/docker-compose-full.yml up -d
 }
 
 @test "[$TEST_FILE] check for container init" {
