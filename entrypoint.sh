@@ -107,9 +107,9 @@ initialize_system() {
     DB_PASSWORD=""
   fi
 
-  CACHE_DRIVER=${CACHE_DRIVER:-apc}
+  CACHE_DRIVER=${CACHE_DRIVER:-file}
 
-  SESSION_DRIVER=${SESSION_DRIVER:-apc}
+  SESSION_DRIVER=${SESSION_DRIVER:-file}
   SESSION_DOMAIN=${SESSION_DOMAIN:-}
   SESSION_SECURE_COOKIE=${SESSION_SECURE_COOKIE:-}
 
@@ -139,7 +139,7 @@ initialize_system() {
   NEXMO_SMS_FROM=${NEXMO_SMS_FROM:-Cachet}
 
   PHP_MAX_CHILDREN=${PHP_MAX_CHILDREN:-5}
-  
+
   TRUSTED_PROXIES=${TRUSTED_PROXIES:-}
 
   # configure env file
@@ -189,10 +189,10 @@ initialize_system() {
   sed 's,{{NEXMO_SECRET}},'"${NEXMO_SECRET}"',g' -i /var/www/html/.env
   sed 's,{{NEXMO_SMS_FROM}},'"${NEXMO_SMS_FROM}"',g' -i /var/www/html/.env
 
-  sed 's,{{PHP_MAX_CHILDREN}},'"${PHP_MAX_CHILDREN}"',g' -i /etc/php7/php-fpm.d/www.conf
-  
+  sed 's,{{PHP_MAX_CHILDREN}},'"${PHP_MAX_CHILDREN}"',g' -i /etc/php82/php-fpm.d/www.conf
+
   sed 's,{{TRUSTED_PROXIES}},'"${TRUSTED_PROXIES}"',g' -i /var/www/html/.env
-  
+
   if [[ -z "${APP_KEY}" || "${APP_KEY}" = "null" ]]; then
     keygen="$(php artisan key:generate --show)"
     APP_KEY=$(echo "${keygen}")
@@ -210,8 +210,8 @@ initialize_system() {
 
 init_db() {
   echo "Initializing Cachet database ..."
-  php artisan cachet:install --no-interaction
-  check_configured
+#  php artisan cachet:install --no-interaction
+#  check_configured
 }
 
 migrate_db() {
@@ -219,11 +219,11 @@ migrate_db() {
   if [[ "${FORCE_MIGRATION:-false}" == true ]]; then
     force="--force"
   fi
-  php artisan migrate ${force}
+  php artisan migrate --force
 }
 
 seed_db() {
-  php artisan db:seed
+  php artisan db:seed --force
 }
 
 start_system() {
@@ -232,7 +232,9 @@ start_system() {
   check_configured
   migrate_db
   seed_db
+  php artisan vendor:publish --tag=cachet --force
   echo "Starting Cachet! ..."
+  php artisan route:cache
   php artisan config:cache
   /usr/bin/supervisord -n -c /etc/supervisor/supervisord.conf
 }
