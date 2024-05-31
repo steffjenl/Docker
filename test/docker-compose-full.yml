@@ -36,7 +36,3 @@ services:
     depends_on:
       - postgres
     restart: on-failure
-networks:
-  default:
-    external:
-      name: docker_default
