@@ -210,7 +210,7 @@ initialize_system() {
 
 init_db() {
   echo "Initializing Cachet database ..."
-#  php artisan cachet:install --no-interaction
+  php artisan migrate:fresh --seed
 #  check_configured
 }
 
@@ -231,7 +231,6 @@ start_system() {
   check_database_connection
   check_configured
   migrate_db
-  seed_db
   php artisan vendor:publish --tag=cachet --force
   echo "Starting Cachet! ..."
   php artisan route:cache
