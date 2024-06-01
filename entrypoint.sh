@@ -114,6 +114,9 @@ initialize_system() {
   SESSION_SECURE_COOKIE=${SESSION_SECURE_COOKIE:-}
 
   QUEUE_DRIVER=${QUEUE_DRIVER:-database}
+  CACHET_PATH=${CACHET_PATH:-status}
+  CACHET_DOMAIN=${CACHET_DOMAIN:-}
+  CACHET_TITLE=${CACHET_TITLE:-Cachet}
   CACHET_EMOJI=${CACHET_EMOJI:-false}
   CACHET_BEACON=${CACHET_BEACON:-true}
   CACHET_AUTO_TWITTER=${CACHET_AUTO_TWITTER:-true}
@@ -210,7 +213,7 @@ initialize_system() {
 
 init_db() {
   echo "Initializing Cachet database ..."
-  php artisan migrate:fresh --seed
+  php artisan migrate:fresh --seed --force
 #  check_configured
 }
 
@@ -232,6 +235,10 @@ start_system() {
   check_configured
   migrate_db
   php artisan vendor:publish --tag=cachet --force
+  php artisan vendor:publish --tag=livewire:assets --force
+  npm install --no-progress --no-audit --no-fund --no-package-lock --no-save
+  npm run build
+  php artisan filament:assets
   echo "Starting Cachet! ..."
   php artisan route:cache
   php artisan config:cache

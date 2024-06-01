@@ -32,6 +32,9 @@ services:
       - APP_ENV=${APP_ENV:-production}
       - APP_DEBUG=false
       - DEBUG=false
+      - CACHET_PATH="/"
+      - CACHET_DOMAIN=
+      - CACHET_TITLE="Cachet - Status Page"
     depends_on:
       - postgres
     restart: on-failure
