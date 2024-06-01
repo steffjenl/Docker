@@ -3,10 +3,13 @@ name: Docker
 on:
   push:
     tags: [ 'v*.*.*' ]
+    branches:
+      - main, feature/*
 
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
+  DOCKER_REPO: ${{ env.DOCKER_REPO || 'cachethq/docker' }}
 
 
 jobs:
@@ -92,9 +95,7 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: ${{ github.event_name != 'pull_request' }}
           tags: |
-            cachethq/docker:latest
-            cachethq/docker:${{steps.set_version.outputs.no-dash}}
-            ghcr.io/${{ steps.lower-repo.outputs.repository }}:latest
+            ${{ env.DOCKER_REPO }}:${{steps.set_version.outputs.no-dash}}
             ghcr.io/${{ steps.lower-repo.outputs.repository }}:${{steps.set_version.outputs.no-dash}}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
