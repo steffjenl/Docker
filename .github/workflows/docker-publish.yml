@@ -9,7 +9,7 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
-  DOCKER_REPO: ${{ env.DOCKER_REPO || 'cachethq/docker' }}
+  DOCKER_REPO: ${{ vars.DOCKER_REPO || 'cachethq/docker' }}
 
 
 jobs:
