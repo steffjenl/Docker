@@ -33,7 +33,7 @@ jobs:
           script: |
             const tag = context.ref.substring(10)
             const no_v = tag.replace('v', '')
-            const no_forwardSlash = no_v.replace('/', '')
+            const no_forwardSlash = no_v.replaceAll('/', '')
             const dash_index = no_forwardSlash.lastIndexOf('-')
             const no_dash = (dash_index > -1) ?  no_forwardSlash.substring(0, dash_index) : no_forwardSlash
             core.setOutput('tag', tag)
