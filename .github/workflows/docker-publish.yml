@@ -3,8 +3,7 @@ name: Docker
 on:
   push:
     tags: [ 'v*.*.*' ]
-    branches:
-      - main, feature/*
+    branches: [ main, test, feature/* ]
 
 env:
   REGISTRY: ghcr.io
