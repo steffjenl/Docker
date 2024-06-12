@@ -1,4 +1,4 @@
-FROM nginx:1.25.5-alpine
+FROM nginx:1-alpine-slim
 LABEL org.opencontainers.image.description="Cachet is a beautiful and powerful open source status page system." \
       org.opencontainers.image.authors="CachetHQ" \
       org.opencontainers.image.url="https://cachethq.io" \
