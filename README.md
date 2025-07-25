@@ -230,7 +230,7 @@ docker-compose up -d
 ## Support
 
 - [Cachet Documentation](https://docs.cachethq.io/)
-- [GitHub Issues](https://github.com/steffjenl/docker-cachet/issues)
+- [GitHub Issues](https://github.com/cachethq/Docker/issues)
 - [Docker Documentation](https://docs.docker.com/)
 
 ## License
