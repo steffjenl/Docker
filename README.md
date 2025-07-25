@@ -66,7 +66,7 @@ MAIL_FROM_NAME="${APP_NAME}"
 ### 3. Start the Services
 
 ```bash
-docker-compose up -d
+docker compose up -d
 ```
 
 This will start all services in the background:
@@ -173,8 +173,8 @@ server {
 To update to the latest version:
 
 ```bash
-docker-compose pull
-docker-compose up -d
+docker compose pull
+docker compose up -d
 ```
 
 ### Backup
@@ -193,12 +193,12 @@ docker exec -i cachet-mariadb mysql -u root -p cachet < backup_file.sql
 
 View application logs:
 ```bash
-docker-compose logs -f cachet-app
+docker compose logs -f cachet-app
 ```
 
 View all service logs:
 ```bash
-docker-compose logs -f
+docker compose logs -f
 ```
 
 ## Troubleshooting
@@ -214,8 +214,8 @@ docker-compose logs -f
 To start fresh:
 
 ```bash
-docker-compose down -v
-docker-compose up -d
+docker compose down -v
+docker compose up -d
 ```
 
 **Warning**: This will delete all data including your database.

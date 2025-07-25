@@ -1,3 +1,2 @@
-*
-!entrypoint.sh
-!conf
+.github
+.env.example

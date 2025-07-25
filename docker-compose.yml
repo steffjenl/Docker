@@ -11,6 +11,7 @@ services:
     ports:
       - "8080:80"
     volumes:
+      - cachet-storage:/var/www/html/storage
       - ./.env:/var/www/html/.env
     networks:
       - cachet-network
@@ -25,6 +26,7 @@ services:
       SERVICE_TAGS: dev
     working_dir: /var/www/html
     volumes:
+      - cachet-storage:/var/www/html/storage
       - ./.env:/var/www/html/.env
     networks:
       - cachet-network
@@ -40,6 +42,7 @@ services:
       SERVICE_TAGS: dev
     working_dir: /var/www/html
     volumes:
+      - cachet-storage:/var/www/html/storage
       - ./.env:/var/www/html/.env
     networks:
       - cachet-network
@@ -48,12 +51,26 @@ services:
 
   mariadb:
     container_name: cachet-mariadb
-    image: mariadb
+    image: mariadb:lts
     restart: unless-stopped
     environment:
       MARIADB_ROOT_PASSWORD: ${DB_PASSWORD}
+    healthcheck:
+      test: [ "CMD", "healthcheck.sh", "--connect", "--innodb_initialized" ]
+      start_period: 10s
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    volumes:
+      - cachet-mariadb-storage:/var/lib/mysql
     networks:
       - cachet-network
+
+volumes:
+  cachet-storage:
+    name: cachet-storage
+  cachet-mariadb-storage:
+    name: cachet-mariadb-storage
 
 networks:
   cachet-network:
