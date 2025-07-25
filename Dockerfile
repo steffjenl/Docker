@@ -2,6 +2,9 @@ FROM ghcr.io/monkeysoftnl/docker-php:8.4-apache
 LABEL description="Docker image for Laravel 10 with Apache, PHP 8.4, Composer, NPM, and Filament admin panel."
 LABEL version="1.0"
 
+# Set GitHub OAuth token as a build argument
+ARG GITHUB_OAUTH
+
 # Set temporary to user root to copy files and set permissions
 USER root
 
@@ -13,6 +16,9 @@ RUN chown -R www-data:www-data /var/www
 
 # Set Default User for Apache
 USER www-data
+
+#
+RUN composer config -g github-oauth.github.com $GITHUB_OAUTH
 
 # Install Composer dependencies and NPM packages
 RUN composer install --no-dev -o
