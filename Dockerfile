@@ -47,7 +47,7 @@ RUN chown -R www-data:www-data /var/www
 USER www-data
 
 # Use GitHub token for Composer because of rate-limitter
-RUN --mount=type=secret,id=github_token,env=GITHUB_TOKEN composer config -g github-oauth.github.com $(cat /run/secrets/github_token)
+RUN --mount=type=secret,id=github_token,env=GITHUB_TOKEN composer config -g github-oauth.github.com $GITHUB_TOKEN
 
 # Install Composer dependencies and NPM packages
 RUN composer install --no-dev -o
