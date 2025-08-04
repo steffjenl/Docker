@@ -1,8 +1,7 @@
 FROM php:8.4-apache
 LABEL description="Cachet Docker Image with MariaDB and PHP 8.4"
 LABEL version="1.0"
-LABEL org.opencontainers.image.description "Cachet Docker Image with MariaDB and PHP 8.4"
-RUN --mount=type=secret,id=github_token,env=GITHUB_TOKEN
+LABEL org.opencontainers.image.description="Cachet Docker Image with MariaDB and PHP 8.4"
 
 # Set DOCUMENT_ROOT to public directory from Laravel
 ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
@@ -48,7 +47,7 @@ RUN chown -R www-data:www-data /var/www
 USER www-data
 
 # Use GitHub token for Composer because of rate-limitter
-RUN composer config -g github-oauth.github.com $GITHUB_TOKEN
+RUN --mount=type=secret,id=github_token,env=GITHUB_TOKEN composer config -g github-oauth.github.com $(cat /run/secrets/github_token)
 
 # Install Composer dependencies and NPM packages
 RUN composer install --no-dev -o
