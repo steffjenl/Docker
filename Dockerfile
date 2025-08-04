@@ -1,13 +1,12 @@
 FROM php:8.4-apache
-LABEL description="Docker image for Laravel 10 with Apache, PHP 8.4, Composer, NPM, and Filament admin panel."
+LABEL description="Cachet Docker Image with MariaDB and PHP 8.4"
 LABEL version="1.0"
+LABEL org.opencontainers.image.description="Cachet Docker Image with MariaDB and PHP 8.4"
 
-# Set GitHub OAuth token as a build argument
-ARG GITHUB_OAUTH
-#
+# Set DOCUMENT_ROOT to public directory from Laravel
 ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
 
-#
+# Copy custom apache and php configuration
 COPY ./.docker/apache/000-default.conf /etc/apache2/sites-available/000-default.conf
 COPY ./.docker/php/cachet.ini /usr/local/etc/php/conf.d/cachet.ini
 
@@ -20,8 +19,10 @@ RUN a2enmod rewrite
 RUN apt-get install tree nano libzip-dev libwebp-dev libfreetype6-dev libjpeg62-turbo-dev libpng-dev zlib1g-dev libicu-dev libpq-dev -y
 RUN apt-get install npm -y
 
+# Configure PostgreSQL module for PHP
 RUN docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql
 
+# Install PHP Modules
 RUN docker-php-ext-install pdo_mysql \
   && docker-php-ext-install mysqli \
   && docker-php-ext-install pgsql\
@@ -46,7 +47,7 @@ RUN chown -R www-data:www-data /var/www
 USER www-data
 
 # Use GitHub token for Composer because of rate-limitter
-RUN composer config -g github-oauth.github.com $GITHUB_OAUTH
+RUN --mount=type=secret,id=github_token,env=GITHUB_TOKEN composer config -g github-oauth.github.com $GITHUB_TOKEN
 
 # Install Composer dependencies and NPM packages
 RUN composer install --no-dev -o
