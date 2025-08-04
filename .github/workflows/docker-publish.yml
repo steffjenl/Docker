@@ -77,9 +77,8 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
-          build-args: |
-            "cachet_ver=${{ github.ref_name }}"
-            "GITHUB_OAUTH=${{ secrets.GITHUB_TOKEN }}"
+          secrets: |
+            "github_token=${{ secrets.GITHUB_TOKEN }}"
           platforms: linux/amd64,linux/arm64
           push: ${{ github.event_name != 'pull_request' }}
           tags: |
